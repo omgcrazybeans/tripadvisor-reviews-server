@@ -1,0 +1,13 @@
+.vscode/
+*.log
+*.pem
+package-lock.json
+temp.js
+style.css
+client/dist/bundle.js
+client/src/helpers/testFilter.js
+client/clientGetReq.js
+node_modules/
+details/
+tests_output/
+test/__snapshots__/
