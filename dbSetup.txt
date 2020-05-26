@@ -1,0 +1,38 @@
+SET UP A DB
+
+- Get Db onto computer
+- Start db server
+- Make schema
+- Make queries
+- Make server api calls to queries
+- Confirm api calls are recieving json files from db
+
+FOR COUCHBASE
+
+- Get Db onto computer
+  - npm i couchbase --save
+
+- Start db server
+  - http://localhost:8091
+  - Start server
+    - open -a Couchbase\ Server
+  - Stop server
+    - osascript -e 'quit app "Couchbase Server"'
+- Make schema
+  - Make a cluster
+  - Make a bucket
+    - https://docs.couchbase.com/server/6.5/rest-api/rest-bucket-create.html
+  - Make a document inside of bucket
+- Make queries
+  -
+- Make server api calls to queries
+- Confirm api calls are recieving json files from db
+
+FOR MYSQL
+
+- Get Db onto computer
+- Start db server
+- Make schema
+- Make queries
+- Make server api calls to queries
+- Confirm api calls are recieving json files from db

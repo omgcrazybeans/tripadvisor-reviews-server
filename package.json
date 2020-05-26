@@ -13,7 +13,10 @@
     "ssl": "openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout localhost-privkey.pem -out localhost-cert.pem",
     "start": "openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout localhost-privkey.pem -out localhost-cert.pem && nodemon server/index.js",
     "test": "jest --env=node --forceExit test/seed.test.js && jest --env=node --forceExit test/server.test.js && jest --forceExit test/App.test.jsx && node nightwatch.js test/nightwatch.test.js -e chrome",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "couchbase-server": "nodemon server/indexCouchBase.js",
+    "mongodb-server": "nodemon server/indexMongoDb.js",
+    "mysql-server": "nodemon server/indexMySql.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +35,7 @@
     "colors": "^1.4.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "couchbase": "^3.0.2",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "fs": "0.0.1-security",
@@ -45,7 +49,8 @@
     "spdy": "^4.0.2",
     "styled-components": "^5.1.0",
     "supertest": "^4.0.2",
-    "underscore": "^1.10.2"
+    "underscore": "^1.10.2",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -57,12 +62,6 @@
     "chromedriver": "^83.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^7.0.0",
-    "eslint-config-airbnb": "^18.1.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.2",
     "geckodriver": "^1.19.1",
     "jest": "^26.0.1",
     "jest-environment-enzyme": "^7.1.2",

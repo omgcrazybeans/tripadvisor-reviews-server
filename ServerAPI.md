@@ -1,93 +1,139 @@
 Server API
 
-GET REVIEWS
+GET TRIPS
 
-GET /reviews
+GET /trip
 
-Path Parameters: NONE
+  Path Parameters: NONE
 
-Success Status Code: 200
+    Success Status Code: 200
 
-Returns: JSON
+  Returns: all parent trip documents in JSON
 
-    {
-      _id: Array,
-      username: String,
-      location: String,
-      contributions: Number,
-      rating: Number,
-      title: String,
-      review: String,
-      dateOfReview: String,
-      dateOfTrip: String,
-      tripType: String,
-      helpful: Number
-    }
+    parent trip document:
 
-GET SPECIFIC REVIEW INFO
+      {
+        _id: String,
+        tripName: {type: String, unique: true},
+        tripLocation: Object,
+        tripUrl: String,
+        tripPicUrl: String,
+        reviews: [review._id, review._id, ...]
+      }
 
-GET /reviews/:id
-Path Parameters:
+    child review document:
 
-id review id
-Success Status Code: 200
+      {
+        _id: String,
+        userInfo: Object,
+        rating: Number,
+        title: String,
+        review: String,
+        tripType: String,
+        reviewDate: Date,
+        dateOfTrip: Date,
+        helpful: Boolean,
+        sharedPicUrl: String
+      }
 
-Returns: JSON
+GET TRIP
 
-    {
-      _id: Array,
-      username: String,
-      location: String,
-      contributions: Number,
-      rating: Number,
-      title: String,
-      review: String,
-      dateOfReview: String,
-      dateOfTrip: String,
-      tripType: String,
-      helpful: Number
-    }
+GET /trip/:id
+
+  Path Parameters:
+
+    id: trip id
+    Success Status Code: 200
+
+  Returns: a single parent trip document in JSON
+
+    parent trip document:
+
+      {
+        _id: String,
+        tripName: {type: String, unique: true},
+        tripLocation: Object,
+        tripUrl: String,
+        tripPicUrl: String,
+        reviews: [review._id, review._id, ...]
+      }
+
+    child review document:
+
+      {
+        _id: String,
+        userInfo: Object,
+        rating: Number,
+        title: String,
+        review: String,
+        tripType: String,
+        reviewDate: Date,
+        dateOfTrip: Date,
+        helpful: Boolean,
+        sharedPicUrl: String
+      }
 
 ADD REVIEW
 
-POST /reviews
-Success Status Code: 201
+POST /trip/:id
 
-Request Body: Expects JSON with the following keys.
+  Path Parameters:
+
+    id: trip id
+    Success Status Code: 201
+
+  Request Body: Expects review JSON object
+
+  child review document:
 
     {
-      username: String,
-      location: String,
-      contributions: Number,
+      _id: String,
+      userInfo: Object,
       rating: Number,
       title: String,
       review: String,
-      dateOfReview: String,
-      dateOfTrip: String,
       tripType: String,
-      helpful: Number
+      reviewDate: Date,
+      dateOfTrip: Date,
+      helpful: Boolean,
+      sharedPicUrl: String
     }
+
+- title: is a mandatory parameter
+- review: is a mandatory parameter
+- helpful: is an optional perameter
+- sharedPicUrl: is an optional parameter
 
 UPDATE REVIEW INFO
 
-PATCH /reviews/:id
-Path Parameters:
+Put /review/:id
 
-id review id
-Success Status Code: 204
+  Path Parameters:
 
-Request Body: Expects JSON with any of the following keys (include only keys to be updated)
+    id: review id
+    Success Status Code: 204
+
+  Request Body: Expects JSON with any of the following keys
 
     {
-      rating: Number,
       title: String,
       review: String
     }
 
+DELETE trip
+
+DELETE trip/:id
+
+  Path Parameters:
+
+    id: trip id
+    Success Status Code: 204
+
 DELETE REVIEW
 
-DELETE restaurant/:id
-Path Parameters:
+DELETE review/:id
 
-id review id
-Success Status Code: 204
+  Path Parameters:
+
+    id review id
+    Success Status Code: 204

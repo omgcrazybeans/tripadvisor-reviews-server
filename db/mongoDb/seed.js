@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const colors = require('colors');
 const faker = require('faker');
-const { connection, Listings } = require('./index.js');
+const { connection, Trip, Reviews, reviewSchema } = require('./indexMongoDb.js');
 
 
 /* =========================================== Faker ============================================ */
@@ -62,19 +62,19 @@ const listings = _.range(0, 100).reduce((trips, listVal) => {
 /* ========================================== MongoDB =========================================== */
 
 // drop collection `listings` if exists
-connection.dropCollection(Listings.modelName) // alternatively: Listings.collection.drop()
+connection.dropCollection(Trips.modelName) // alternatively: Listings.collection.drop()
   .then((res) => (res ? console.log(`'${Listings.modelName.green}' ${'collection dropped'.yellow}`) : null))
   .catch(({ errmsg }) => console.error(colors.red(`'${Listings.modelName}': ${errmsg}`)));
 
 // create an array of promises to save documents to collection
 const promises = listings.reduce((accum, listing) => {
-  accum.push(new Listings(listing).save());
+  accum.push(new Trip(listing).save());
 
   return accum;
 }, []);
 
 // save documents to collection
 Promise.all(promises)
-  .then(({ length }) => console.log(`${length.toString().cyan} documents saved to '${Listings.modelName.green}'`))
+  .then(({ length }) => console.log(`${length.toString().cyan} documents saved to '${Trip.modelName.green}'`))
   .catch(console.error)
   .finally(() => connection.close());
