@@ -17,11 +17,15 @@ app.get('/seedtest', (req, res) => {
   console.log('seeded data: ', results)
 });
 
-app.get('/trips', db.getAllTrips);
-app.post('/trips', db.addReview);
-app.put('/trips/:id', db.updateReview);
-app.delete('/trips/:id', db.deleteReview);
-app.get('/trips/datasize', db.dataSize);
+app.get('/trip', db.getAllTrips); // Dont need
+// app.get('/trip/:id')
+// app.post('/trip', db.addTrip);
+app.post('/review', db.addReview);
+// app.put('/trip/:id', db.updateTrip);
+app.put('/review/:id', db.updateReview);
+app.delete('/trip/:id', db.deleteReview);
+// app.delete('/review/:id',)
+app.get('/trip/datasize', db.dataSize);
 
 app.listen(4060, () => {
   console.log('MongoDb server listening on port 4060!');
