@@ -1,6 +1,6 @@
 // Set up our express application
 var db = require('../db/mongoDb/indexMongoDb.js');
-var dbGenerator = require('../db/mongoDb/seedMongoDb.js');
+var dbGenerator = require('../db/mongoDb/seedTrips.js');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var express = require('express');
@@ -13,12 +13,11 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/seedtest', (req, res) => {
-  var results = dbGenerator.bringMeMyReviews();
-  console.log('seeded data: ', results)
+  dbGenerator.bringMeMyTrips();
 });
 
 app.get('/trip', db.getAllTrips); // Dont need
-// app.get('/trip/:id')
+app.get('/trip/:id', db.getTripById);
 // app.post('/trip', db.addTrip);
 app.post('/review', db.addReview);
 // app.put('/trip/:id', db.updateTrip);

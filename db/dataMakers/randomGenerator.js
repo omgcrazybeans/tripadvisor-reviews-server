@@ -73,8 +73,9 @@ module.exports = {
     return `${firstDigit}${secondDigit}`;
   },
   randomNum: () => {
-    var num = (Math.floor(Math.random() * 99));
-    return num;
+    var num = (Math.floor(Math.random() * 4));
+    var numTwo = (Math.floor(Math.random() * 4));
+    return (num * numTwo);
   },
   rating: () => {
     var num = (Math.floor(Math.random() * 5));
@@ -128,17 +129,61 @@ module.exports = {
       }
     }
   },
-  sharedPic: () => {
-    var oddsPicker = Math.floor(Math.random() * 10);
-    var numPicker = Math.floor(Math.random() * randomImages.length);
-    var picPicker = randomImages[numPicker];
-    var picContainer = {};
-
-    if (oddsPicker > 7) {
-      var exponentialNum = Math.floor(Math.random() * 4);
-      var numGen = Math.exp() // 0 - 4
-    }
-
+  userProfilePic: () => {
+    var picAPic = randomImages[Math.floor(Math.random() * randomImages.length)];
+    return picAPic;
   },
-  numOfReviews: () => {}
+  sharedPic: () => {
+    var oddsPicker = Math.floor(Math.random() * 4);
+    var picContainer = [];
+    var numOfPics = 0;
+
+    if (oddsPicker === 0) {
+      let picOdds = Math.floor(Math.random() * 1);
+      numOfPics = picOdds;
+    }
+    if (oddsPicker === 1) {
+      let picOdds = Math.floor(Math.random() * 2);
+      numOfPics = picOdds;
+    }
+    if (oddsPicker === 2) {
+      let picOdds = Math.floor(Math.random() * 3);
+      numOfPics = picOdds;
+    }
+    if (oddsPicker === 3) {
+      let picOdds = Math.floor(Math.random() * 4);
+      numOfPics = picOdds;
+    }
+    if (numOfPics === 0) {
+      return picContainer;
+    }
+    for (var i = 0; i < numOfPics; i ++) {
+      let picPicker = Math.floor(Math.random() * randomImages.length);
+      let pic = randomImages[picPicker];
+
+      picContainer.push(pic);
+    }
+    return picContainer;
+  },
+  numOfReviews: () => {
+    var oddsPicker = Math.floor(Math.random() * 4);
+    if (oddsPicker === 0) {
+      return 0
+    }
+    if (oddsPicker === 1) {
+      let odds = Math.floor(Math.random() * 2);
+      let expGrowth = Math.floor(Math.exp(odds));
+      return expGrowth;
+    }
+    if (oddsPicker === 2) {
+      let odds = Math.floor(Math.random() * 3);
+      let expGrowth = Math.floor(Math.exp(odds));
+      return expGrowth;
+    }
+    if (oddsPicker === 3) {
+      let odds = Math.floor(Math.random() * 4);
+      let expGrowth = Math.floor(Math.exp(odds));
+      return expGrowth;
+    }
+  }
 };

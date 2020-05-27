@@ -10,13 +10,13 @@ const reviewSchema = new Schema({
   _id: String,
   userInfo: Object,
   rating: Number,
-  title: String,
-  review: String,
+  title: {type: String, required: true},
+  review: {type: String, required: true},
   tripType: String,
   reviewDate: Date,
   dateOfTrip: Date,
   helpful: Boolean,
-  sharedPicUrl: String
+  sharedPicUrl: Array
 });
 
 // userInfo: {
@@ -78,33 +78,97 @@ module.exports = {
   reviewSchema: reviewSchema,
 
 
-  getAllTrips: () => {
-    Trip.find(); // Return All documents
+  getAllTrips: (req, res) => {
+    return Trip.find().exec((err, list) => {
+      if (err) {
+        return next(err)
+      }
+      console.log('newlyListed: ', list)
+      res.json(list);
+    });
 
-    Trip.find( {"userName" : "JimBob OvalDress" } ); // Returns all reviews by JimBob OvalDress
+    // Return All documents
+    // res.json(allTrips);
+
+    // console.log(`ALL MY DOCS: `, allTrips);
+    // Trip.find( {"userName" : "JimBob OvalDress" } );
+     // Returns all reviews by JimBob OvalDress
+  },
+
+  getTripById: (req, res) => {
+    var docId = req.params.id;
+    var tripId = "88cfe1fa-3da1-4790-b072-16ee5396f968";
+    console.log(`docId: `, docId);
+
+    return Trip.find( { _id : tripId } ).exec((err, list) => {
+      if (err) {
+        return next(err)
+      }
+      console.log('newlyListed: ', list)
+      res.json(list);
+    });
+
+
   },
 
     //********************[ADD NEW REVIEW SCHEMA]******************** */
 
-  addReview: (req, res) => {
+  addReview: async (req, res) => {
+    // req.params.tripId for trip _id number
+    let changeBackToNewReview = req.body;
+    let tripId = "88cfe1fa-3da1-4790-b072-16ee5396f968";
+    let newReview =
+      {
+        _id: 'eb11f200-e014-4679-80f6-baceba7326b2',
+        userInfo: {
+          userName: 'Meagan_Bruen',
+          userCity: 'Hellerview',
+          userCountry: 'Puerto Rico',
+          userProfilePicUrl: 'http://lorempixel.com/640/480/food',
+          userContributions: 0
+        },
+        rating: 2,
+        title: 'aggregate Pants Soft',
+        review: 'If we copy the port, we can get to the THX protocol through the auxiliary SAS monitor!',
+        tripTyper: 'family2',
+        reviewDate: new Date(2019, 1),
+        dateOfTrip: new Date(2018, 10),
+        helpful: false,
+        sharedPicUrl: [
+          'http://lorempixel.com/640/480/nightlife',
+          'http://lorempixel.com/640/480/city'
+        ]
+      };
 
-    let newReview = req.body;
+    if (newReview._id === undefined) {
+      newReview._id = uuid.v4();
+    };
 
-    const trip = Trip.findOne({ _id: req.body._id });
+    var reviewIdObj = {_id: newReview._id};
 
-    const reviews = trip.tripReviews;
-    console.log(reviews);
-    console.log(Array.isArray(reviews)); // true
-
-    trip.reviews.push(newReview);
-
-    const updated = trip.save((err,cust) => {
+    Trip.create(newReview, (err, addedReview) => {
       if (err) {
         return console.error(err);
       }
-      console.log(`Successfully added review`)
+      console.log(`Successfully added review`, addedReview);
     });
-    console.log(`Complete new document: `, updated); // Return trip object plus appended reviews
+
+    Trip.findOne({ _id: tripId }).exec((err, list) => {
+      if (err) {
+        return next(err)
+      }
+      // res.json(list);
+      var reviewsArray = list.reviews;
+      reviewsArray.push(reviewIdObj);
+      console.log(`ADD REVIEW, REVIEWS ARRAY: `, reviewsArray);
+      list.save((err, updatedDocument) => {
+          if (err) {
+            return console.error(err);
+          }
+          console.log(`Successfully added reviewId to trip document: `,  updatedDocument);
+        });
+    });
+
   },
 
   //****************************[UPDATE REVIEW SCHEMA]************ */
@@ -179,20 +243,32 @@ module.exports = {
     console.log(`I'm in the addTrip function`);
   },
 
-  saveToDb: (tripWithReviews) => {
-    console.log('save: ', tripWithReviews)
+  saveTripToDb: (tripWithReviews) => {
 
-    tripWithReviews.forEach(reviews => {
-      var trip = new Trip(reviews); //new document
-      trip.save((err, tripReview) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('DATA SAVED IN database/indexMongoDb.js: ', tripReview)
-        }
-      })
-    })
+    console.log('Im in saveTripToDb: ', tripWithReviews);
+
+    // tripWithReviews.forEach(reviews => {
+    //   var trip = new Trip(reviews); //new document
+    //   trip.save((err, tripReview) => {
+    //     if (err) {
+    //       console.log(err);
+    //     } else {
+    //       console.log('DATA SAVED IN database/indexMongoDb.js: ', tripReview)
+    //     }
+    //   })
+    // })
       // propertyArray.push(propertyObj);
   },
+
+  saveReviewsToDb: (reviewsContainer) => {
+    console.log(`SAVE REVIEWS TO DB: `, reviewsContainer)
+    var containerLength = reviewsContainer.length;
+
+    if (containerLength === 0) {
+      console.log(`No reviews to save`);
+    } else {
+      // reviewsContainer.forEach();
+    };
+  }
 
 };
