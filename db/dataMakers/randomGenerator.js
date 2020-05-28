@@ -78,7 +78,7 @@ module.exports = {
     return (num * numTwo);
   },
   rating: () => {
-    var num = (Math.floor(Math.random() * 5));
+    var num = (Math.ceil(Math.random() * 5));
     return num;
   },
   tripType: () => {

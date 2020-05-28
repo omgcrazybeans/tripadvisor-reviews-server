@@ -1,4 +1,4 @@
-const colors = require('colors');
+const uuid = require('uuid');
 const Promise = require('bluebird');
 const mongoose = Promise.promisifyAll(require('mongoose'));
 const { COLLECTION, OPTIONS, URI } = require('./config.js');
@@ -9,10 +9,10 @@ const { Schema } = mongoose;
 const reviewSchema = new Schema({
   _id: String,
   userInfo: Object,
-  rating: Number,
+  rating: {type: Number, min: 1, max: 5},
   title: {type: String, required: true},
-  review: {type: String, required: true},
-  tripType: String,
+  review: {type: String, required: true, minlength: 1, maxlength: 400},
+  tripType: {type: String, enum: ['couples', 'family1', 'family2', 'friends', 'business', 'solo']},
   reviewDate: Date,
   dateOfTrip: Date,
   helpful: Boolean,
@@ -34,7 +34,7 @@ const tripSchema = new Schema({
   tripLocation: Object,
   tripUrl: String,
   tripPicUrl: String,
-  reviews: Array
+  reviews: [{ type: String, ref: 'reviews' }]
 });
 
 // tripLocation: {
@@ -47,6 +47,7 @@ const tripSchema = new Schema({
 
 // create model(model_name, instance_of_schema, collection_name)
 const Trip = mongoose.model(COLLECTION, tripSchema);
+const Review = mongoose.model('reviews', reviewSchema);
 
 // Trip.init().then(() => {
     // safe to create users now.
@@ -95,12 +96,24 @@ module.exports = {
      // Returns all reviews by JimBob OvalDress
   },
 
+  getAllTripsAndReviews: (req, res) => {
+    Trip.find().populate('reviews').catch(error => console.error(error));
+  },
+
+  getAllReviews: (req, res) => {
+    Review.find().then(reviewDoc => {
+      res.json(reviewDoc);
+    }).catch(error => console.error(error));
+  },
+
   getTripById: (req, res) => {
     var docId = req.params.id;
     var tripId = "88cfe1fa-3da1-4790-b072-16ee5396f968";
     console.log(`docId: `, docId);
 
-    return Trip.find( { _id : tripId } ).exec((err, list) => {
+    return Trip.find( { _id : tripId } )
+    .populate('reviews')
+    .exec((err, list) => {
       if (err) {
         return next(err)
       }
@@ -113,23 +126,23 @@ module.exports = {
 
     //********************[ADD NEW REVIEW SCHEMA]******************** */
 
-  addReview: async (req, res) => {
+  addReview: (req, res) => {
     // req.params.tripId for trip _id number
     let changeBackToNewReview = req.body;
-    let tripId = "88cfe1fa-3da1-4790-b072-16ee5396f968";
+    let tripId = "5a018bcc-5a4d-489a-b6a5-5b795e9612cb";
     let newReview =
       {
-        _id: 'eb11f200-e014-4679-80f6-baceba7326b2',
+        // _id: 'eb11f200-e666-4679-80f6-baceba7326b2',
         userInfo: {
-          userName: 'Meagan_Bruen',
+          userName: 'Test addReview 1',
           userCity: 'Hellerview',
           userCountry: 'Puerto Rico',
           userProfilePicUrl: 'http://lorempixel.com/640/480/food',
           userContributions: 0
         },
         rating: 2,
-        title: 'aggregate Pants Soft',
-        review: 'If we copy the port, we can get to the THX protocol through the auxiliary SAS monitor!',
+        title: 'Test addReview 2',
+        review: 'Test addReview 2',
         tripTyper: 'family2',
         reviewDate: new Date(2019, 1),
         dateOfTrip: new Date(2018, 10),
@@ -144,9 +157,10 @@ module.exports = {
       newReview._id = uuid.v4();
     };
 
-    var reviewIdObj = {_id: newReview._id};
+    // var reviewIdObj = {_id: newReview._id};
+    var reviewIdObj = newReview._id;
 
-    Trip.create(newReview, (err, addedReview) => {
+    Review.create(newReview, (err, addedReview) => {
       if (err) {
         return console.error(err);
       }
@@ -157,7 +171,6 @@ module.exports = {
       if (err) {
         return next(err)
       }
-      // res.json(list);
       var reviewsArray = list.reviews;
       reviewsArray.push(reviewIdObj);
       console.log(`ADD REVIEW, REVIEWS ARRAY: `, reviewsArray);
@@ -171,64 +184,152 @@ module.exports = {
 
   },
 
-  //****************************[UPDATE REVIEW SCHEMA]************ */
+  addTrip: (req, res) => {
+    let changeBackToNewTrip = req.body;
+    let newTrip = {
+      // _id: '81098ca3-80d2-4d1b-9cec-e8230398888b',
+      tripName: 'What a wonderful time in Japan',
+      tripLocation: { city: 'Osaka', country: 'Japan' },
+      tripUrl: 'https://www.tripadvisor.com/AttractionProductReview-g60750-81098ca3-80d2-4d1b-9cec-e8230398888b-verbPhrase_Take_a_scenic_wine_tour_around_Aydenmouth.html',
+      tripPicUrl: 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/6t/k0/eg.jpg',
+      reviews: [
+        'c3eed110-26ea-4b07-923b-7042abe25fc7',
+        'd52e6cc2-fbb6-4cb9-bd69-6003f498c594'
+      ]
+    };
 
-  updateReview: (req, res) => { // Update reviews if reviews were appended to trips document
+    if (newTrip._id === undefined) {
+      newTrip._id = uuid.v4();
+    };
 
-    let updatedReview = req.body;
+    var TripIdObj = {_id: newTrip._id};
 
-    const trip = Trip.findOne({ _id: req.body._id });
-
-    const specificReview =
-    trip.reviews.findOne({ _id: req.body.reviewId });
-
-    specificReview = updatedReview;
-
-    const updated = specificReview.save((err, rev) => {
+    Trip.create(newTrip, (err, addedTrip) => {
       if (err) {
         return console.error(err);
       }
-      console.log(`Successfully updated review`)
+      console.log(`Successfully added Trip: `, addedTrip);
     });
-    console.log(updated);
   },
 
-  updatedReview2: (req, res) => { // Update review. If reviews were saved as docs
-    let revInfo = req.body;
+  //****************************[UPDATE REVIEW SCHEMA]************ */
 
-    Trip.update(
-      { _id: req.body._id },
-      { $set: {
-        rating: `${revInfo.rating}`,
-        title: `${revInfo.title}`,
-        review: `${revInfo.review}`,
-        tripType: `${revInfo.tripType}`,
-        reviewDate: `${revInfo.reviewDate}`,
-        dateOfTrip: `${revInfo.dateOfTrip}`,
-        helpful: `${revInfo.helpful}`,
-        sharedPicUrl: `${revInfo.sharedPicUrl}`
-        }
-      }, (err, rev) => {
-        if (err) {
-          console.error(err);
-        }
-        console.log(`Review was successfully updated`);
-      });
+  updateTrip: (req, res) => {
+
+    let tripId = req.params.is;
+    var testId = '5a018bcc-5a4d-489a-b6a5-5b795e9612cb';
+    let updatedTrip = {
+      // _id: '81098ca3-80d2-4d1b-9cec-e8230398888b',
+      tripName: 'Get white girl wasted around Lexington',
+      tripLocation: { city: 'Lexington', country: 'Uganda' },
+      tripUrl: 'https://www.tripadvisor.com/AttractionProductReview-g60750-81098ca3-80d2-4d1b-9cec-e8230398888b-verbPhrase_Take_a_scenic_wine_tour_around_Aydenmouth.html',
+      tripPicUrl: 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/6t/k0/eg.jpg'
+      // reviews: [
+      //   'c3eed110-26ea-4b07-923b-7042abe25fc7',
+      //   'd52e6cc2-fbb6-4cb9-bd69-6003f498c594'
+      // ]
+    }
+
+    Trip.update({ _id: testId }, updatedTrip, (err, tripDoc) => {
+      if (err) {
+        return console.error(err);
+      }
+      console.log(`Successfully updated Trip: `, tripDoc);
+    });
+
+  },
+
+  updateReview: (req, res) => { // Update reviews if reviews were appended to trips document
+    let reviewId = 'ae10c3bf-79c2-43a8-9584-642b2a9f6483';
+    let updatedReview = {
+      // _id: '92fc4820-0559-4b78-95ba-54a49baf1b2a',
+      userInfo: {
+        userName: 'Hellen_FisherBrough2020',
+        userCity: 'Down Under',
+        userCountry: 'South Compton Island',
+        userProfilePicUrl: 'http://lorempixel.com/640/480/food',
+        userContributions: 3
+      },
+      rating: 1,
+      title: 'Damn birds everywhere',
+      review: 'This will be the last time I ever go to the South Comptin Isles. A bird stole my wallet and a dingo ate my baby.',
+      tripTyper: 'family1',
+      reviewDate: new Date(2019, 1),
+      dateOfTrip: new Date(2018, 10),
+      helpful: false,
+      sharedPicUrl: [
+        'http://lorempixel.com/640/480/nightlife',
+        'http://lorempixel.com/640/480/city'
+      ]
+    };
+
+    Review.update({ _id: reviewId }, updatedReview, (err, reviewDoc) => {
+      if (err) {
+        return console.error(err);
+      }
+      console.log(`Successfully updated Review: `, reviewDoc);
+    });
+
+  },
+
+  deleteTrip: (req, res) => {
+    let tripId = req.params.id;
+    let testId = '5a018bcc-5a4d-489a-b6a5-5b795e9612cb';
+
+      Trip.find({_id: testId})
+      .then(tripDoc => {
+        console.log(`This is the trip doc: `, tripDoc[0].reviews);
+        tripDoc[0].reviews.forEach(reviewId => {
+          Review.deleteOne({_id: reviewId})
+          .then((revIdNum) => console.log(`Successfully deleted review: ${revIdNum._id} from reviews array!`))
+          .catch(error => console.error(error));
+        });
+      })
+      .catch(error => console.error(error));
+
+      Trip.deleteOne({_id: testId})
+      .then((tripDoc) => console.log(`Successfully deleted trip document: ${tripId}`))
+      .catch(error => console.error(error));
+
+
   },
 
   deleteReview: (req, res) => {
 
-    let reviewId = req.body._id;
+    let reviewId = 'f460a978-9698-4a5f-9802-a2945287d0da';
+    let tripId = '9bf6c091-3896-4d38-bd53-2bc3c4ea7dd4';
 
-    Trip.remove( { } ); // Remove all documents in collection
+    Trip.find({ _id: tripId })
+    .then(tripDoc => {
+      let reviewsArray = tripDoc[0].reviews;
+      reviewsArray.pull(reviewId)
+      // .then(() => console.log( `Review: ${reviewId} has been deleted from trip document!`))
+      // .catch(error => console.error(error));
+      console.log(`THIS IS THE TRIP DOCUMENT: ${tripDoc}`);
+      console.log(`THIS IS THE REVIEWS ARRAY: ${reviewsArray}`);
+      tripDoc.set('reviews', reviewsArray, { new: true }).then(() => console.log(`Trip document has been updated`)).catch(error => console.error(error));
+    })
+    .catch(error => console.error(error));
 
-    Trip.remove( { userName: req.body.userName } ); // Removes all documents with a specific username
+    Review.deleteOne( {_id: reviewId })
+    .then(() => console.log(`Review: ${reviewId} successfully deleted from database!`))
+    .catch(error => console.error(error));
+  },
 
-    Trip.remove( {_id: reviewId }, (err, rev) => {
+  killAllData: (req, res) => {
+
+    Trip.deleteMany({}).exec((err, rev) => {
       if (err) {
         console.error(err);
       }
-      console.log(`Review was successfully deleted`)
+      console.log(`All trip documents have been deleted!`)
+    });
+
+    Review.deleteMany({}).exec((err, rev) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log(`All review documents have been deleted`)
     });
   },
 
@@ -239,25 +340,13 @@ module.exports = {
 
   //*************************************************[SEEDING FUNCTIONS]*********************************** */
 
-  addTrip: () => {
-    console.log(`I'm in the addTrip function`);
-  },
-
   saveTripToDb: (tripWithReviews) => {
 
     console.log('Im in saveTripToDb: ', tripWithReviews);
 
-    // tripWithReviews.forEach(reviews => {
-    //   var trip = new Trip(reviews); //new document
-    //   trip.save((err, tripReview) => {
-    //     if (err) {
-    //       console.log(err);
-    //     } else {
-    //       console.log('DATA SAVED IN database/indexMongoDb.js: ', tripReview)
-    //     }
-    //   })
-    // })
-      // propertyArray.push(propertyObj);
+    Trip.create(tripWithReviews)
+    .then(tripDoc => console.log(`Trip document has been saved!`))
+    .catch(error => console.error(error));
   },
 
   saveReviewsToDb: (reviewsContainer) => {
@@ -265,9 +354,11 @@ module.exports = {
     var containerLength = reviewsContainer.length;
 
     if (containerLength === 0) {
-      console.log(`No reviews to save`);
+      console.log(`No reviews to save!`);
     } else {
-      // reviewsContainer.forEach();
+      Review.create(reviewsContainer)
+      .then(revDoc => console.log(`Review document saved!`))
+      .catch(error => console.error(error));
     };
   }
 
