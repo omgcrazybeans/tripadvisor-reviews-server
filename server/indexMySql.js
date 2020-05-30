@@ -1,6 +1,7 @@
 // Set up our express application
 var db = require('../db/mySqlDb/indexMySql.js');
 var bodyParser = require('body-parser');
+var dbGenerator = require('../db/mySqlDb/seedTrips.js');
 var cors = require('cors');
 var express = require('express');
 var app = express();
@@ -11,12 +12,22 @@ app.use(bodyParser.json());
 // Serve the public directory to the root of the web server.
 app.use(express.static('public'));
 
-app.post('/seed', db.tripMaker);
+app.get('/seedtest', (req, res) => {
+  dbGenerator.bringMeMyTrips();
+});
 
-app.get('/trips', db.getAllData);
-app.post('/trips', db.addReview);
-app.put('/trips/:id', db.updateReview);
-app.delete('/trips/:id', db.deleteReview)
+app.get('/trip', db.getAllTrips); // Dont need
+app.get('/review', db.getAllReviews);
+app.get('/trip/:id', db.getTripById); // Done
+app.post('/trip', db.addTrip); // Done
+app.post('/review', db.addReview); // Done
+app.put('/trip/:id', db.updateTrip); // Done +
+app.put('/review/:id', db.updateReview); // Done +
+app.delete('/trip/:id', db.deleteTrip); // Done ++
+app.delete('/review/:id', db.deleteReview); // Can't save updated trip documemt after I pull the deleted review id out of reviews array
+app.delete('/thefinalcountdown', db.killAllData); // Deletes all documents in both collections
+app.get('/trip/datasize', db.dataSize);
+app.get('/tablesize', db.tableSize);
 
 app.listen(4050, () => {
   console.log('MySql server listening on port 4050!');

@@ -15,6 +15,9 @@ app.use(express.static('public'));
 app.get('/seedtest', (req, res) => {
   dbGenerator.bringMeMyTrips();
 });
+// app.get('/seedreviews', (req, res) => {
+//   dbGenerator.bringMeMyTrips();
+// });
 
 app.get('/trip', db.getAllTrips); // Dont need
 app.get('/review', db.getAllReviews);

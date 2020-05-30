@@ -7,7 +7,7 @@
     "api": "node client/clientGetReq.js",
     "react-dev": "webpack -p --watch",
     "react-test": "jest --forceExit test/App.test.jsx",
-    "seed": "node db/seed.js",
+    "seed-mongodb": "node db/seed.js",
     "seed-test": "jest --env=node --forceExit test/seed.test.js",
     "server-test": "jest --env=node --forceExit test/server.test.js",
     "ssl": "openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout localhost-privkey.pem -out localhost-cert.pem",
@@ -16,7 +16,8 @@
     "test:watch": "npm run test -- --watch",
     "couchbase-server": "nodemon server/indexCouchBase.js",
     "mongodb-server": "nodemon server/indexMongoDb.js",
-    "mysql-server": "nodemon server/indexMySql.js"
+    "mysql-server": "nodemon --max-old-space-size=6144 server/indexMySql.js",
+    "seed-mysql": "mysql -u root -p < schema.sql"
   },
   "repository": {
     "type": "git",
@@ -67,6 +68,7 @@
     "jest-environment-enzyme": "^7.1.2",
     "jest-enzyme": "^7.1.2",
     "mocha": "^7.1.2",
+    "mysql": "^2.18.1",
     "nightwatch": "^1.3.5",
     "nodemon": "^2.0.4",
     "react-test-renderer": "^16.13.1",

@@ -11,3 +11,4 @@ node_modules/
 details/
 tests_output/
 test/__snapshots__/
+db/mySqlDb/config.js

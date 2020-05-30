@@ -52,6 +52,10 @@ var years = [
   2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020
 ];
 
+var mySqlMonths = [
+
+];
+
 var randomImages = [
   faker.image.city(), faker.image.food(), faker.image.nightlife(), faker.image.fashion(), faker.image.people(), faker.image.nature(), faker.image.animals()
 ]
@@ -185,5 +189,86 @@ module.exports = {
       let expGrowth = Math.floor(Math.exp(odds));
       return expGrowth;
     }
+  },
+
+  mySqlDateGen: () => {
+    var dateNumPicker = Math.ceil(Math.random() * 90);
+    return dateNumPicker;
+  },
+
+  mySqlTripDate: (datePicker) => {
+    var month;
+    var year;
+
+    if (datePicker > 84) {
+      year = 2020;
+      month = datePicker - 84;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 72) {
+      year = 2019;
+      month = datePicker - 72;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 60) {
+      year = 2018;
+      month = datePicker - 60;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 48) {
+      year = 2017;
+      month = datePicker - 48;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 36) {
+      year = 2016;
+      month = datePicker - 36;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 24) {
+      year = 2015;
+      month = datePicker - 24;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 12) {
+      year = 2014;
+      month = datePicker - 12;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+    if (datePicker > 0) {
+      year = 2013;
+      month = datePicker;
+      if (month > 9) {
+        return `${year}-${month}-01`;
+      }
+      return  `${year}-0${month}-01`;
+    }
+  },
+
+  mySqlUserTripDateGen: (dateNum) => {
+    var numGen = Math.floor(Math.random() * 4);
+    return (dateNum + numGen);
   }
+
 };

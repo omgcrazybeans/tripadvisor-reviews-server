@@ -7,4 +7,7 @@ const mysqlConfig = {
   database: 'tripAdvisorReviews',
 };
 const connection = mysql.createConnection(mysqlConfig);
+
+connection.connect(() => console.log('connected to the database'));
+
 module.exports = connection;
