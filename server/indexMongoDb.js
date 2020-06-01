@@ -27,6 +27,8 @@ app.delete('/trip/:id', db.deleteTrip); // Done ++
 app.delete('/review/:id', db.deleteReview); // Can't save updated trip documemt after I pull the deleted review id out of reviews array
 app.delete('/thefinalcountdown', db.killAllData); // Deletes all documents in both collections
 app.get('/datesize', db.dataSize);
+app.get('/querytest1', db.queryTest1);
+app.get('/querytest2', db.queryTest2);
 
 app.listen(4060, () => {
   console.log('MongoDb server listening on port 4060!');

@@ -32,6 +32,7 @@ app.delete('/thefinalcountdown', db.killAllData);
 
 app.get('/tablesize', db.tableSize);
 app.get('/datasize', db.dataSize);
+app.get('/querytest1', db.queryTest1);
 
 app.listen(4050, () => {
   console.log('MySql server listening on port 4050!');

@@ -1,0 +1,18 @@
+SELECT * FROM trips where trip_id = 888569
+1 row in set (0.00 sec)
+
+SELECT * FROM trips where trip_country = 'Cuba';
+41310 rows in set (5.88 sec)
+
+SELECT * FROM reviews WHERE review_id = 6398733;
+1 row in set (0.01 sec)
+
+SELECT * FROM reviews WHERE local_trip_id = 6398733;
+7 rows in set (0.01 sec)
+
+SELECT * FROM reviews WHERE rating > 3 AND tripType = 'business';
+2054679 rows in set (26.97 sec)
+
+SELECT * FROM reviews WHERE rating > 3 AND tripType = 'business' AND helpful = true AND userdb_contributions > 5;
+7658 rows in set (23.95 sec)
+

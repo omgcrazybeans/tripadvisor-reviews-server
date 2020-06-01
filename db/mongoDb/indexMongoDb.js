@@ -106,28 +106,24 @@ module.exports = {
 
 
   getAllTrips: (req, res) => {
-    console.time(`Time test`);
-    console.timeEnd(`Time test`);
-    return Trip.find().exec((err, list) => {
+
+    // asc, desc, ascending, descending, 1, and -1.
+    // { field: 'asc', test: -1 }
+    // .sort('field -test')
+
+    return Trip.find().sort({tripDate: 'desc'}).limit(20).exec((err, list) => {
       if (err) {
         return next(err)
       }
       console.log('newlyListed: ', list)
       res.json(list);
     });
-
-    // Return All documents
-    // res.json(allTrips);
-
-    // console.log(`ALL MY DOCS: `, allTrips);
-    // Trip.find( {"userName" : "JimBob OvalDress" } );
-     // Returns all reviews by JimBob OvalDress
   },
 
   getAllTripsAndReviews: (req, res) => {
     console.time(`Time to get all trip documents`);
 
-    Trip.find().populate('reviews').catch(error => console.error(error));
+    Trip.find().populate('reviews').sort({tripDate: 'asc'}).limit(20).catch(error => console.error(error));
     console.timeEnd(`Time to get all trip documents`);
   },
 
@@ -385,16 +381,31 @@ module.exports = {
     console.timeEnd(`Time to kill all database`);
   },
 
+  queryTest1: (req, res) => {
+    let tripId = `0d518ee1-3c00-4317-b5f3-5930d3a802e1`;
+
+    // 'queryPlanner', 'executionStats', or 'allPlansExecution'
+
+    Trip.find({_id: tripId}).explain('executionStats').then(results => console.log(`Results: `, results));
+  },
+
+  queryTest2: (req, res) => {
+
+    let reviewId = `098c87fc-88e6-44ba-8e5c-7024c04fbf91`;
+
+    Review.find({_id: reviewId}).explain('executionStats').then(results => console.log(`Results: `, results));
+  },
+
   dataSize: (req, res) => {
 
     Trip.collection.stats(function(err, results) {
       console.log(results.storageSize);
-  });
+    });
 
-  var size = Review.stats(function(err, results) {
+    var size = Review.stats(function(err, results) {
     console.log(results.storageSize);
-});
-return size
+    });
+    return size
 
     // // db.orders.countDocuments({});
     // connection.once('open', () => {

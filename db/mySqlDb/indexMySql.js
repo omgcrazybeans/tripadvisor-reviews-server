@@ -191,6 +191,17 @@ module.exports = {
     });
   },
 
+  queryTest1: (req, res) => {
+    var sql = `SELECT * FROM trips where trip_id = 888569`;
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log(`Query results: `, results);
+    });
+
+  },
+
 
   tableSize: (req, res) => {
     var sql1 = `SELET * FROM tripAdvisorReviews`;
