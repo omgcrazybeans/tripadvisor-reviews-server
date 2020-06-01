@@ -16,18 +16,22 @@ app.get('/seedtest', (req, res) => {
   dbGenerator.bringMeMyTrips();
 });
 
-app.get('/trip', db.getAllTrips); // Dont need
+app.get('/trip', db.getAllTrips);
 app.get('/review', db.getAllReviews);
-app.get('/trip/:id', db.getTripById); // Done
-app.post('/trip', db.addTrip); // Done
-app.post('/review', db.addReview); // Done
-app.put('/trip/:id', db.updateTrip); // Done +
-app.put('/review/:id', db.updateReview); // Done +
-app.delete('/trip/:id', db.deleteTrip); // Done ++
-app.delete('/review/:id', db.deleteReview); // Can't save updated trip documemt after I pull the deleted review id out of reviews array
-app.delete('/thefinalcountdown', db.killAllData); // Deletes all documents in both collections
-app.get('/trip/datasize', db.dataSize);
+app.get('/trip/:id', db.getTripById);
+
+app.post('/trip', db.addTrip);
+app.post('/review', db.addReview);
+
+app.put('/trip/:id', db.updateTrip);
+app.put('/review/:id', db.updateReview);
+
+app.delete('/trip/:id', db.deleteTrip);
+app.delete('/review/:id', db.deleteReview);
+app.delete('/thefinalcountdown', db.killAllData);
+
 app.get('/tablesize', db.tableSize);
+app.get('/datasize', db.dataSize);
 
 app.listen(4050, () => {
   console.log('MySql server listening on port 4050!');

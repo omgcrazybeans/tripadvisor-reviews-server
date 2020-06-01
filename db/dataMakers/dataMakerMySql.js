@@ -68,11 +68,11 @@ module.exports = {
     };
 
     let titler = () => {
-      var noun = faker.hacker.noun();
-      var verb = faker.hacker.verb();
-      var adjective = faker.hacker.adjective();
-      var phrase = faker.random.words();
-      var ingverb = faker.hacker.ingverb();
+      let noun = faker.hacker.noun();
+      let verb = faker.hacker.verb();
+      let adjective = faker.hacker.adjective();
+      let phrase = faker.random.words();
+      let ingverb = faker.hacker.ingverb();
       mysqlReview[6] = `${phrase} ${adjective} ${noun}`;
     };
 

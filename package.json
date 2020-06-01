@@ -15,7 +15,7 @@
     "test": "jest --env=node --forceExit test/seed.test.js && jest --env=node --forceExit test/server.test.js && jest --forceExit test/App.test.jsx && node nightwatch.js test/nightwatch.test.js -e chrome",
     "test:watch": "npm run test -- --watch",
     "couchbase-server": "nodemon server/indexCouchBase.js",
-    "mongodb-server": "nodemon server/indexMongoDb.js",
+    "mongodb-server": "nodemon --max-old-space-size=6144 server/indexMongoDb.js",
     "mysql-server": "nodemon --max-old-space-size=6144 server/indexMySql.js",
     "seed-mysql": "mysql -u root -p < schema.sql"
   },

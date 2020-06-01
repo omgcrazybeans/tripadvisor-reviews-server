@@ -181,37 +181,46 @@ module.exports = {
   },
 
   killAllData: (req, res) => {
-    var sqlTrips = "DROP TABLE IF EXISTS trips";
-    var sqlReviews = "DROP TABLE IF EXISTS reviews";
+    var sql = `DROP DATABASE tripAdvisorReviews`;
 
     db.query(sqlTrips, (err, result) => {
-      if (err) throw err;
-      console.log(result);
-    });
-
-    db.query(sqlReviews, (err, result) => {
-      if (err) throw err;
-      console.log(result);
+      if (err) {
+        console.erro(erro);
+      }
+      console.log(`Don't forget to reseed schema!`);
     });
   },
 
-  dataSize: (req, res) => {
-    var query = `SELET * FROM tripAdvisorReviews`;
 
-    // SHOW VARIABLES LIKE 'max_allowed_packet';
-    // find how to ask for query speed
-    // find how to ask for seeding speed
+  tableSize: (req, res) => {
+    var sql1 = `SELET * FROM tripAdvisorReviews`;
+    var sql2 = ``;
+
+    db.query(sql1, (err, results) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log(`Table size results: `, results);
+    });
+
+    db.query(sql2, (err, results) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log(`Table size results: `, results);
+    });
+
     // https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_bulk_insert_buffer_size
   },
 
-  tableSize: (req, res) => {
+  dataSize: (req, res) => {
     var sql = `SELECT table_name AS "Table", ROUND(((data_length + index_length) / 1024 / 1024), 2) AS "Size (MB)" FROM information_schema.TABLES WHERE table_schema = "tripAdvisorReviews" ORDER BY (data_length + index_length) DESC`;
 
     db.query(sql, (err, results) => {
       if (err) {
         console.error(err);
       }
-      console.log(`Table size results: `, results);
+      console.log(`Data size results: `, results);
     });
   },
 

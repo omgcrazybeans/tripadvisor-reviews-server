@@ -2,6 +2,7 @@ const uuid = require('uuid');
 const Promise = require('bluebird');
 const mongoose = Promise.promisifyAll(require('mongoose'));
 const { COLLECTION, OPTIONS, URI } = require('./config.js');
+// const trigger = require('./seedReviews.js');
 
 const { Schema } = mongoose;
 
@@ -16,7 +17,8 @@ const reviewSchema = new Schema({
   reviewDate: Date,
   dateOfTrip: Date,
   helpful: Boolean,
-  sharedPicUrl: Array
+  sharedPicUrl: Array,
+  parentId: String
 });
 
 // userInfo: {
@@ -34,6 +36,7 @@ const tripSchema = new Schema({
   tripLocation: Object,
   tripUrl: String,
   tripPicUrl: String,
+  tripDate: Date,
   reviews: [{ type: String, ref: 'reviews' }]
 });
 
@@ -42,17 +45,10 @@ const tripSchema = new Schema({
 //     country: String,
 //   }
 
-// reviews: Array
-
 
 // create model(model_name, instance_of_schema, collection_name)
 const Trip = mongoose.model(COLLECTION, tripSchema);
 const Review = mongoose.model('reviews', reviewSchema);
-
-// Trip.init().then(() => {
-    // safe to create users now.
-    // Do this or else tripName: { type: String, unique: true } won't work
-// });
 
 // initial conn and handle initial conn errors
 mongoose.connect(URI, OPTIONS)
@@ -62,14 +58,44 @@ mongoose.connect(URI, OPTIONS)
 // conn to database
 const { connection } = mongoose;
 
+// Make hashed ID's instead of uuid's
+// Trip.createIndex( { _id: hashedValue } );
+// Review.createIndex( { _id: hashedValue } );
+
+tripSchema.index({_id: 1, tripDate: 1});
+reviewSchema.index({ _id: 1, parentId: -1, tripType: 1});
+
 // handle errors after initial conn was established by listening for error events on the conn
 connection.on('error', (err) => console.error(err));
 
 // successful conn
 connection.once('open', () => {
-  console.log(`Using database ${connection.name.green}`);
+  console.log(`Using database ${connection.name}`);
 });
 
+Trip.collection.stats((err, results) => {
+  var megabytes = (results.size / 1000000);
+  var stats = {};
+  stats.dataInDatabaseB = `${results.size} bytes of data in collection`;
+  stats.dataInDatabaseMb = `${megabytes} Mb of data in collection`;
+  stats.docCount = `${results.count} documents in collection`;
+  stats.avgObjSize = results.avgObjSize;
+  stats.storageSize = results.storageSize;
+
+  console.log(`Trip stats: `, stats);
+});
+
+Review.collection.stats((err, results) => {
+  var megabytes = (results.size / 1000000);
+  var stats = {};
+  stats.dataInDatabaseB = `${results.size} bytes of data in collection`;
+  stats.dataInDatabaseMb = `${megabytes} Mb of data in collection`;
+  stats.docCount = `${results.count} documents in collection`;
+  stats.avgObjSize = results.avgObjSize;
+  stats.storageSize = results.storageSize;
+
+  console.log(`Review stats: `, stats);
+});
 
 module.exports = {
 
@@ -80,6 +106,8 @@ module.exports = {
 
 
   getAllTrips: (req, res) => {
+    console.time(`Time test`);
+    console.timeEnd(`Time test`);
     return Trip.find().exec((err, list) => {
       if (err) {
         return next(err)
@@ -97,16 +125,24 @@ module.exports = {
   },
 
   getAllTripsAndReviews: (req, res) => {
+    console.time(`Time to get all trip documents`);
+
     Trip.find().populate('reviews').catch(error => console.error(error));
+    console.timeEnd(`Time to get all trip documents`);
   },
 
   getAllReviews: (req, res) => {
+    console.time(`Time to get all review documents`);
+
     Review.find().then(reviewDoc => {
       res.json(reviewDoc);
     }).catch(error => console.error(error));
+    console.timeEnd(`Time to get all review documents`);
   },
 
   getTripById: (req, res) => {
+    console.time(`Time test`);
+    console.timeEnd(`Time test`);
     var docId = req.params.id;
     var tripId = "88cfe1fa-3da1-4790-b072-16ee5396f968";
     console.log(`docId: `, docId);
@@ -128,6 +164,8 @@ module.exports = {
 
   addReview: (req, res) => {
     // req.params.tripId for trip _id number
+    console.time(`Time to add review`);
+
     let changeBackToNewReview = req.body;
     let tripId = "5a018bcc-5a4d-489a-b6a5-5b795e9612cb";
     let newReview =
@@ -181,10 +219,12 @@ module.exports = {
           console.log(`Successfully added reviewId to trip document: `,  updatedDocument);
         });
     });
-
+    console.timeEnd(`Time to add review`);
   },
 
   addTrip: (req, res) => {
+    console.time(`Time to add trip`);
+
     let changeBackToNewTrip = req.body;
     let newTrip = {
       // _id: '81098ca3-80d2-4d1b-9cec-e8230398888b',
@@ -210,11 +250,13 @@ module.exports = {
       }
       console.log(`Successfully added Trip: `, addedTrip);
     });
+    console.timeEnd(`Time to add trip`);
   },
 
   //****************************[UPDATE REVIEW SCHEMA]************ */
 
   updateTrip: (req, res) => {
+    console.time(`Time to update trip`);
 
     let tripId = req.params.is;
     var testId = '5a018bcc-5a4d-489a-b6a5-5b795e9612cb';
@@ -236,10 +278,12 @@ module.exports = {
       }
       console.log(`Successfully updated Trip: `, tripDoc);
     });
-
+    console.timeEnd(`Time to update trip`);
   },
 
   updateReview: (req, res) => { // Update reviews if reviews were appended to trips document
+    console.time(`Time to update review`);
+
     let reviewId = 'ae10c3bf-79c2-43a8-9584-642b2a9f6483';
     let updatedReview = {
       // _id: '92fc4820-0559-4b78-95ba-54a49baf1b2a',
@@ -269,10 +313,12 @@ module.exports = {
       }
       console.log(`Successfully updated Review: `, reviewDoc);
     });
-
+    console.timeEnd(`Time to update review`);
   },
 
   deleteTrip: (req, res) => {
+    console.time(`Time to delete trip`);
+
     let tripId = req.params.id;
     let testId = '5a018bcc-5a4d-489a-b6a5-5b795e9612cb';
 
@@ -291,10 +337,11 @@ module.exports = {
       .then((tripDoc) => console.log(`Successfully deleted trip document: ${tripId}`))
       .catch(error => console.error(error));
 
-
+      console.timeEnd(`Time to delete trip`);
   },
 
   deleteReview: (req, res) => {
+    console.time(`Time to delete review`);
 
     let reviewId = 'f460a978-9698-4a5f-9802-a2945287d0da';
     let tripId = '9bf6c091-3896-4d38-bd53-2bc3c4ea7dd4';
@@ -314,9 +361,12 @@ module.exports = {
     Review.deleteOne( {_id: reviewId })
     .then(() => console.log(`Review: ${reviewId} successfully deleted from database!`))
     .catch(error => console.error(error));
+
+    console.timeEnd(`Time to delete review`);
   },
 
   killAllData: (req, res) => {
+    console.time(`Time to kill all database`);
 
     Trip.deleteMany({}).exec((err, rev) => {
       if (err) {
@@ -331,35 +381,67 @@ module.exports = {
       }
       console.log(`All review documents have been deleted`)
     });
+
+    console.timeEnd(`Time to kill all database`);
   },
 
   dataSize: (req, res) => {
 
-    Trip.totalSize(); // Returns size of data in database (in bytes)
+    Trip.collection.stats(function(err, results) {
+      console.log(results.storageSize);
+  });
+
+  var size = Review.stats(function(err, results) {
+    console.log(results.storageSize);
+});
+return size
+
+    // // db.orders.countDocuments({});
+    // connection.once('open', () => {
+    //   // call stats directly
+    //   connection.db.stats((err, data) => {
+    //     logger.debug(data);
+
+    //   });
+
+    //   // or you can call your mongoUsage here
+    // });
+    // Trip.totalSize()
+    // .then(results => console.log(`Results: `, results))
+    // .catch(error => console.error(error)); // Returns size of data in database (in bytes)
   },
 
   //*************************************************[SEEDING FUNCTIONS]*********************************** */
 
-  saveTripToDb: (tripWithReviews) => {
+  saveTripToDb: (tripsContainer, i) => {
 
-    console.log('Im in saveTripToDb: ', tripWithReviews);
+    // let trips = tripsContainer;
 
-    Trip.create(tripWithReviews)
-    .then(tripDoc => console.log(`Trip document has been saved!`))
+    console.time(`Bulk trips saved to db`);
+
+    Trip.create(tripsContainer)
+    .then(tripDoc => console.log(`Trip documents saved: ${i}`))
     .catch(error => console.error(error));
+
+    console.timeEnd(`Bulk trips saved to db`);
   },
 
   saveReviewsToDb: (reviewsContainer) => {
-    console.log(`SAVE REVIEWS TO DB: `, reviewsContainer)
-    var containerLength = reviewsContainer.length;
 
-    if (containerLength === 0) {
-      console.log(`No reviews to save!`);
-    } else {
-      Review.create(reviewsContainer)
-      .then(revDoc => console.log(`Review document saved!`))
+    let i = reviewsContainer.length;
+
+    console.time(`Bulk reviews save to db`);
+
+      Review.create(reviewsContainer, {ordered: false})
+      .then(revDoc => {
+        console.log(`Review documents saved: ${i}`);
+        // if (i === 50000) {
+        //   trigger.bringMeMyReviews();
+        // }
+      })
       .catch(error => console.error(error));
-    };
+
+      console.timeEnd(`Bulk reviews save to db`);
   }
 
 };

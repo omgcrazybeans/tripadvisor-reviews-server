@@ -1,4 +1,5 @@
 const faker = require('faker');
+const Promise = require('bluebird');
 
 var attributes = [
 
@@ -269,6 +270,70 @@ module.exports = {
   mySqlUserTripDateGen: (dateNum) => {
     var numGen = Math.floor(Math.random() * 4);
     return (dateNum + numGen);
+  },
+
+  mongoDbDateGen: () => {
+    var dateNumPicker = Math.floor(Math.random() * 90);
+    return dateNumPicker;
+  },
+
+  mongoDbTripDate: (datePicker) => {
+    var dateArray = [];
+
+    if (datePicker > 83) {
+      dateArray[0] = 2020;
+      dateArray[1] = datePicker - 83;
+      return  dateArray;
+    }
+    if (datePicker > 71) {
+      dateArray[0] = 2019;
+      dateArray[1] = datePicker - 71;
+      return  dateArray;
+    }
+    if (datePicker > 59) {
+      dateArray[0] = 2018;
+      dateArray[1] = datePicker - 59;
+      return dateArray;
+    }
+    if (datePicker > 47) {
+      dateArray[0] = 2017;
+      dateArray[1] = datePicker - 47;
+      return  dateArray;
+    }
+    if (datePicker > 35) {
+      dateArray[0] = 2016;
+      dateArray[1] = datePicker - 35;
+      return  dateArray;
+    }
+    if (datePicker > 23) {
+      dateArray[0] = 2015;
+      dateArray[1] = datePicker - 23;
+      return  dateArray;
+    }
+    if (datePicker > 11) {
+      dateArray[0] = 2014;
+      dateArray[1] = datePicker - 11;
+      return dateArray;
+    }
+    if (datePicker >= 0) {
+      dateArray[0] = 2013;
+      dateArray[1] = datePicker;
+      return  dateArray;
+    }
+  },
+
+  mongoDbDateScrambler: (dateNum) => {
+    var numGen = Math.floor(Math.random() * 4);
+    return (dateNum + numGen);
+  },
+
+  wait: (n) => {
+    let min = n * (1000 * 60);
+    return new Promise(done => {
+      setTimeout(() => {
+        done();
+      }, min);
+    });
   }
 
 };
