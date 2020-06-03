@@ -16,6 +16,7 @@
     "test:watch": "npm run test -- --watch",
     "couchbase-server": "nodemon server/indexCouchBase.js",
     "mongodb-server": "nodemon --max-old-space-size=6144 server/indexMongoDb.js",
+    "mongo-start": "node --max-old-space-size=6144 server/indexMongoDb.js",
     "mysql-server": "nodemon --max-old-space-size=6144 server/indexMySql.js",
     "seed-mysql": "mysql -u root -p < schema.sql"
   },
@@ -35,6 +36,7 @@
     "chai-as-promised": "^7.1.1",
     "colors": "^1.4.0",
     "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "couchbase": "^3.0.2",
     "express": "^4.17.1",

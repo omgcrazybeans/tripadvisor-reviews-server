@@ -1,16 +1,47 @@
 // Set up our express application
-var db = require('../db/mongoDb/indexMongoDb.js');
-var dbGenerator = require('../db/mongoDb/seedTrips.js');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var express = require('express');
-var app = express();
+const db = require('../db/mongoDb/indexMongoDb.js');
+const dbGenerator = require('../db/mongoDb/seedTrips.js');
+const port = process.env.PORT || 4060
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const cors = require('cors');
+const express = require('express');
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Logger Middleware
+app.use(morgan('dev'));
+
+// Helmet helps you secure your Express apps by setting various HTTP headers.
+app.use(helmet())
+
+// CORS Middleware
+app.use(cors());
 
 // Serve the public directory to the root of the web server.
 app.use(express.static('public'));
+
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+
+  // Set static folder
+  // All the javascript and css files will be read and served from this folder
+  app.use(express.static("client/build"));
+
+  // index.html for all page routes  html or routing and naviagtion
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+  });
+}
+
+
 
 app.get('/seedtest', (req, res) => {
   dbGenerator.bringMeMyTrips();
@@ -30,6 +61,7 @@ app.get('/datesize', db.dataSize);
 app.get('/querytest1', db.queryTest1);
 app.get('/querytest2', db.queryTest2);
 
-app.listen(4060, () => {
-  console.log('MongoDb server listening on port 4060!');
+
+app.listen(port, () => {
+  console.log(`MongoDb server listening on port ${port}!`);
 });

@@ -1,7 +1,9 @@
 const uuid = require('uuid');
 const Promise = require('bluebird');
+const config = require('./key');
+const URI = require('./mongoConfig.js');
 const mongoose = Promise.promisifyAll(require('mongoose'));
-const { COLLECTION, OPTIONS, URI } = require('./config.js');
+const { COLLECTION, OPTIONS } = require('./config.js');
 // const trigger = require('./seedReviews.js');
 
 const { Schema } = mongoose;
@@ -51,7 +53,7 @@ const Trip = mongoose.model(COLLECTION, tripSchema);
 const Review = mongoose.model('reviews', reviewSchema);
 
 // initial conn and handle initial conn errors
-mongoose.connect(URI, OPTIONS)
+mongoose.connect(URI.URI, OPTIONS)
   .then(() => console.log(`Connected to mongoDB on PORT: 27017`))
   .catch(console.error);
 
