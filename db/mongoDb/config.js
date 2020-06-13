@@ -14,5 +14,4 @@ const COLLECTION = 'trips';
 module.exports = {
   COLLECTION,
   OPTIONS,
-  URI,
 };

@@ -55,7 +55,7 @@ const Review = mongoose.model('reviews', reviewSchema);
 // initial conn and handle initial conn errors
 mongoose.connect(URI.URI, OPTIONS)
   .then(() => console.log(`Connected to mongoDB on PORT: 27017`))
-  .catch(console.error);
+  .catch(error => console.error(error));
 
 // conn to database
 const { connection } = mongoose;
@@ -112,13 +112,17 @@ module.exports = {
     // asc, desc, ascending, descending, 1, and -1.
     // { field: 'asc', test: -1 }
     // .sort('field -test')
-
-    return Trip.find().sort({tripDate: 'desc'}).limit(20).exec((err, list) => {
+    var dateNum = new Date(2019, 07)
+   let date = {
+      $gte: new Date(2019, 07)
+  };
+  console.log(`Date: `, dateNum);
+    return Trip.find().sort({tripDate: 'desc'}).limit(1).exec((err, list) => {
       if (err) {
-        return next(err)
+        res.status(400).next(err)
       }
-      console.log('newlyListed: ', list)
-      res.json(list);
+      console.log('Trips found: ', list)
+      res.status(200).json(list);
     });
   },
 
@@ -128,6 +132,47 @@ module.exports = {
     Trip.find().populate('reviews').sort({tripDate: 'asc'}).limit(20).catch(error => console.error(error));
     console.timeEnd(`Time to get all trip documents`);
   },
+
+  getAllTrips1: (req, res) => {
+    var countries = ["Egypt", "Cuba", "Brazil", "Canada", "China", "Italy", "Saudi Arabia", "Sweden", "Mexico", "Japan", "South Africa", "Ireland"];
+    var location = countries[Math.floor(Math.random() * countries.length)];
+    let country = {"tripLocation.country": location};
+
+    return Trip.find(country)
+    .sort({tripDate: -1})
+    .limit(20).exec((err, list) => {
+      if (err) {
+        return res.status(400).next(err)
+      }
+      console.log('Trips1 returned');
+      res.status(200).json(list);
+    });
+},
+
+getAllReviews1: (req, res) =>  {
+  // {"rating": 3, "helpful": true, "userInfo.userCountry": "China"}
+  var dateNum = new Date(2019, 07)
+  let date = {
+     $gte: new Date(2019, 07)
+ };
+  var countries = ["Egypt", "Cuba", "Brazil", "Canada", "China", "Italy", "Saudi Arabia", "Sweden", "Mexico", "Japan", "South Africa", "Ireland"];
+  var bool = [true,false];
+  var rateNum = [1, 2, 3, 4, 5];
+  var location = countries[Math.floor(Math.random() * countries.length)];
+  var trueFalse = bool[Math.floor(Math.random() * bool.length)];
+  var rating = rateNum[Math.floor(Math.random() * rateNum.length)];
+  let search = {"rating": rating, "userInfo.userCountry": location, "helpful": trueFalse, "dateOfTrip": date};
+
+  return Review.find(search)
+    .sort({tripDate: -1})
+    .limit(3).exec((err, list) => {
+      if (err) {
+        return res.status(400).next(err)
+      }
+      console.log('Reviews returned: ', list);
+      res.status(200).json(list);
+    });
+},
 
   getAllReviews: (req, res) => {
     console.time(`Time to get all review documents`);
@@ -215,6 +260,7 @@ module.exports = {
             return console.error(err);
           }
           console.log(`Successfully added reviewId to trip document: `,  updatedDocument);
+          res.status(200);
         });
     });
     console.timeEnd(`Time to add review`);
@@ -247,6 +293,7 @@ module.exports = {
         return console.error(err);
       }
       console.log(`Successfully added Trip: `, addedTrip);
+      res.status(200);
     });
     console.timeEnd(`Time to add trip`);
   },
@@ -275,6 +322,7 @@ module.exports = {
         return console.error(err);
       }
       console.log(`Successfully updated Trip: `, tripDoc);
+      res.status(200);
     });
     console.timeEnd(`Time to update trip`);
   },
@@ -310,6 +358,7 @@ module.exports = {
         return console.error(err);
       }
       console.log(`Successfully updated Review: `, reviewDoc);
+      res.status(200);
     });
     console.timeEnd(`Time to update review`);
   },
@@ -334,8 +383,8 @@ module.exports = {
       Trip.deleteOne({_id: testId})
       .then((tripDoc) => console.log(`Successfully deleted trip document: ${tripId}`))
       .catch(error => console.error(error));
-
       console.timeEnd(`Time to delete trip`);
+      res.status(200);
   },
 
   deleteReview: (req, res) => {

@@ -48,9 +48,13 @@ class App extends Component {
   /**
    * Axios GET request - Initialize App's `reviews`
    */
+  // { data: reviews }
   componentDidMount() {
-    axios.get('/reviews')
-      .then(({ data: reviews }) => this.setState({ reviews }))
+    axios.get('/trip')
+      .then(data => {
+        console.log(`trip Data: `, data);
+        // this.setState({ data })
+      })
       .catch(console.error);
   }
 

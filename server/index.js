@@ -25,7 +25,9 @@ app.use(compression());
 app.use(helmet());
 
 // set the 'Content-Type' that the middleware will parse
-app.use(express.json());
+// app.use(express.json());
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({ extended: true }) );
 
 // logger
 app.use(({ body, method, secure, url }, res, next) => {
@@ -37,7 +39,7 @@ app.use(({ body, method, secure, url }, res, next) => {
 });
 
 // serving static file
-app.use(express.static(path.join(__dirname, '../client/dist')));
+app.use(express.static(__dirname, '../client/dist'));
 
 /* ==================================== HTTP request handlers =================================== */
 
