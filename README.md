@@ -1,4 +1,4 @@
-# tripadvisor-reviews-server
+# Wanderlust - Wander off onto your next adventure
 
 ======= 1. Seeding Instructions =======
 
