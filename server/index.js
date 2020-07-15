@@ -2,6 +2,7 @@ const colors = require('colors');
 const compression = require('compression');
 const cors = require('cors');
 const express = require('express');
+const app = express();
 const helmet = require('helmet');
 const path = require('path');
 const Promise = require('bluebird');
@@ -9,13 +10,8 @@ const spdy = require('spdy');
 const { OPTIONS, PORT } = require('./config.js');
 const { Listings } = require('../db/index.js');
 
-
 /* ======================================= Express server ======================================= */
 
-// create express application
-const app = express();
-
-// enable cors
 app.use(cors());
 
 // compression middleware
@@ -24,26 +20,20 @@ app.use(compression());
 // security-related HTTP middleware
 app.use(helmet());
 
-// set the 'Content-Type' that the middleware will parse
-// app.use(express.json());
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded({ extended: true }) );
 
-// logger
 app.use(({ body, method, secure, url }, res, next) => {
   console.log(`${method.yellow} request at ${secure} ${url.cyan}`);
   console.log(body);
 
-  // next middleware
   next();
 });
 
-// serving static file
 app.use(express.static(__dirname, '../client/dist'));
 
 /* ==================================== HTTP request handlers =================================== */
 
-// for '../test/server.test.js'
 app.get('/reviews/:id', ({ params: { id } }, res) => {
   Listings.findById(id)
     .then((query) => res.status(200).send(query))
@@ -56,7 +46,7 @@ app.get('/reviews', (req, res) => {
     .catch((err) => res.status(500).send(err));
 });
 
-app.put('/reviews', ({ body: { _id } }, res) => { // nested destructuring
+app.put('/reviews', ({ body: { _id } }, res) => {
   Listings.findOne()
     .then((query) => {
       const doc = query;
@@ -64,7 +54,7 @@ app.put('/reviews', ({ body: { _id } }, res) => { // nested destructuring
       return Listings.findByIdAndUpdate({ _id: _id[0] }, new Listings(doc));
     })
     .then(() => Listings.findOne())
-    .then(({ reviews }) => res.status(200).send(reviews)) // update
+    .then(({ reviews }) => res.status(200).send(reviews))
     .catch((err) => res.status(500).send(err));
 });
 
