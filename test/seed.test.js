@@ -20,12 +20,6 @@ describe('#countDocuments()', () => {
   it(`expect '${modelName.yellow}' collection to have ${count.cyan} documents`, (done) => {
     Listings.countDocuments().should.eventually.equal(count);
     done(); // notify Mocha asynchronous test done
-
-    // alternatively:
-    // Listings.countDocuments()
-    // .then(res => expect(res).to.equal(count)) // assertion test
-    // .catch(console.error)
-    // .finally(() => connection.close()) // close the database connection
   });
 });
 

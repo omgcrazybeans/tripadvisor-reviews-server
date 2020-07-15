@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-// const Font = styled('font')`
-//   font-family: 'Trip Sans', Arial, sans-serif !important;
-//   font-size: 14px;
-// `;
-
-// Style <p> tag in `Languages`, `Ratings`, `TimeOfYear`, and `TravelerType` components
 const P = styled.p`
   font-family: 'Trip Sans', Arial, sans-serif !important;
   font-size: 14px;
@@ -13,21 +7,18 @@ const P = styled.p`
   color: rgb(0, 10, 18);
 `;
 
-// Style <label> tag in `Languages`, `Ratings`, `TimeOfYear`, and `TravelerType` components
 const Label = styled.label`
   font-family: 'Trip Sans', Arial, sans-serif !important;
   font-size: 14px;
   color: rgb(0, 0, 0)
 `;
 
-// Style number in `Languages` component
 const Span = styled.span`
   font-family: 'Trip Sans', Arial, sans-serif !important;
   font-size: 14px;
   color: rgb(118, 118, 118);
 `;
 
-// half-circle
 const HalfCircle = styled.div`
   display: inline-block;
   background-color: #00aa6c;
@@ -37,7 +28,6 @@ const HalfCircle = styled.div`
   border-radius: 16px 0 0 16px;
 `;
 
-// full-circle
 const FullCircle = styled.div`
   display: inline-block;
   background-color: #00aa6c;
@@ -47,7 +37,6 @@ const FullCircle = styled.div`
   -moz-border-radius: 8px;
 `;
 
-// transparent-circle
 const TransparentCircle = styled.div`
   display: inline-block;
   border: 1px solid #00aa6c;
@@ -57,7 +46,6 @@ const TransparentCircle = styled.div`
   -moz-border-radius: 7px;
 `;
 
-// Style flexbox in `App` component
 const ReviewsBox = styled.div`
   /* create flex layout */
   display: flex;
@@ -71,7 +59,7 @@ const ReviewsBox = styled.div`
 
   /* define background */
   background-color: white;
-  
+
   /* define border */
   border-top: 1px solid #D3D3D3;
   border-bottom: 2px solid black;
@@ -84,11 +72,10 @@ const ReviewsBox = styled.div`
   list-style: none;
 `;
 
-// Style <h2> tag in `Header` component
 const H2 = styled.h2`
   /* create flex layout */
   display: flex;
-  
+
   /* define border */
   border-top: 2px solid black;
   border-bottom: 1px solid #D3D3D3;
@@ -100,7 +87,7 @@ const H2 = styled.h2`
 
   /* define how remaining space is destributed */
   justify-content: flex-start;
-  
+
   padding: 10px;
   margin: 0;
 
@@ -113,7 +100,6 @@ const H2 = styled.h2`
   background-color: white;
 `;
 
-// Style <form> tag in `Search` component
 const FormSearch = styled.form`
   /* create flex layout */
   display: flex;
@@ -123,7 +109,7 @@ const FormSearch = styled.form`
 
   /* define how remaining space is destributed */
   justify-content: flex-start;
-  
+
   padding: 0;
   margin: 10px 0 10px 0;
 
@@ -132,7 +118,6 @@ const FormSearch = styled.form`
   font-size: 14px;
 `;
 
-// Style <input type="search"> tag in `Search` component
 const InputSearch = styled.input.attrs({
   type: 'search',
   name: 'search',

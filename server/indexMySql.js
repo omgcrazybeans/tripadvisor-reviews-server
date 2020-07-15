@@ -1,4 +1,3 @@
-// Set up our express application
 var db = require('../db/mySqlDb/indexMySql.js');
 var bodyParser = require('body-parser');
 var dbGenerator = require('../db/mySqlDb/seedTrips.js');
@@ -9,7 +8,6 @@ var app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Serve the public directory to the root of the web server.
 app.use(express.static('public'));
 
 app.get('/seedtest', (req, res) => {

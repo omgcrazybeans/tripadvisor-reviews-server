@@ -1,20 +1,15 @@
 import React from 'react';
 import _ from 'underscore';
 import { FullCircle } from '../css/style';
-import { /* filterMonths, filterRatings, filterTypes, */ filterAll, filterSearch, isPlural } from '../helpers/functions';
-
+import { filterAll, filterSearch, isPlural } from '../helpers/functions';
 
 const ReviewList = ({ handleChange, ratings, reviews, target, times, types }) => (
   <div>
     {reviews.length !== 0
-      ? 
+      ?
         (reviews = filterAll(reviews, ratings, times, types),
         reviews = filterSearch(target, reviews),
-        // reviews = filterMonths(times, reviews),
-        // reviews = filterTypes(types, reviews),
-        // reviews = filterRatings(ratings, reviews),
-        // console.log(reviews),
-        reviews.map(({ 
+        reviews.map(({
           _id,
           username,
           location,
@@ -25,12 +20,12 @@ const ReviewList = ({ handleChange, ratings, reviews, target, times, types }) =>
           dateOfReview,
           dateOfTrip,
           tripType,
-          helpful 
+          helpful
         }) => (
           <div key={_id}>
             <p>{username} wrote a review {dateOfReview}</p>
             <p>
-              &#x1F4CD; {location} 
+              &#x1F4CD; {location}
               <span> &#8226; </span>
               {contributions} contribution{isPlural(contributions)}
               <span> &#8226; </span>
@@ -47,7 +42,7 @@ const ReviewList = ({ handleChange, ratings, reviews, target, times, types }) =>
           </div>
         ))
         )
-      : null 
+      : null
     }
   </div>
 );

@@ -9,19 +9,9 @@ import TimeOfYear from './TimeOfYear';
 import TravelerType from './TravelerType';
 import { ReviewsBox } from '../css/style';
 import OPTIONS from './app.config';
-import {
-  languages,
-  ratings,
-  times,
-  types,
-} from '../helpers/reviewsGridConfig';
-
+import { languages, ratings,times,types } from '../helpers/reviewsGridConfig';
 
 class App extends Component {
-  /**
-   * Constructor
-   * @param {Object} props - Short for properties; has all the values passed from parent component.
-   */
   constructor(props) {
     super(props); // Sets `this.props`. Otherwise, when accessing `this.props`, would be `undefined`
 
@@ -44,11 +34,6 @@ class App extends Component {
     this.updateHelpful = this.updateHelpful.bind(this);
   }
 
-
-  /**
-   * Axios GET request - Initialize App's `reviews`
-   */
-  // { data: reviews }
   componentDidMount() {
     axios.get('/trip')
       .then(data => {
@@ -58,48 +43,31 @@ class App extends Component {
       .catch(console.error);
   }
 
-  /**
-   * Handle change in Languages' `props`
-   * @param {Object} target - The `target` property of the `Event` interface is a reference to the
-   *                          object onto which the event was dispatched.
-   * @param {String} name - The native DOM `name` attribute.
-   * @param {String} selectedLang - An alias for `name` parameter.
-   */
   handleLangChange({ target: { name: selectedLang } }) {
     this.setState({
       selectedLang,
     });
   }
 
-
-  /**
-   * Handle change in Ratings' `props`
-   * @param {Object} event - The `Event` interface; a reference to the object onto which the event
-   *                         was dispatched.
-   */
   handleRatingChange(event) {
-    // {String} `name` - A native DOM attribute
-    // {Boolean} `checked` - A native DOM attribute
     const { name, checked } = event.target;
-    const index = event.target.getAttribute('index'); // {String} `index` - A custom DOM attribute
-    const ratings = [...this.state.ratings]; // array copy
+    const index = event.target.getAttribute('index');
+    const ratings = [...this.state.ratings];
 
     ratings[index] = {
       [name]: checked,
     };
-
 
     this.setState({
       ratings,
     });
   }
 
-
   handleSearchChange(event) {
-    const { name, value } = event.target; // {String} `name` - A native DOM attr; equals to 'search'
+    const { name, value } = event.target;
 
     this.setState({
-      [name]: value, // 'search': value
+      [name]: value,
     });
   }
 
@@ -108,82 +76,45 @@ class App extends Component {
     event.preventDefault();
   }
 
-
-  /**
-   * Handle change in TimeOfYear's `props`
-   * @param {Object} event - The `Event` interface; a reference to the object onto which the event
-   *                         was dispatched.
-   */
   handleTimeChange(event) {
-    // {String} `name` - A native DOM attribute
-    // {Boolean} `checked` - A native DOM attribute
     const { name, checked } = event.target;
-    const index = event.target.getAttribute('index'); // {String} `index` - A custom DOM attribute
-    const times = [...this.state.times]; // array copy
+    const index = event.target.getAttribute('index');
+    const times = [...this.state.times];
 
     times[index] = {
       [name]: checked,
     };
-
 
     this.setState({
       times,
     });
   }
 
-
-  /**
-   * Handle change in TravelerType's `props`
-   * @param {Object} event - The `Event` interface; a reference to the object onto which the event
-   *                         was dispatched.
-   */
   handleTravelerChange(event) {
-    // {String} `name` - A native DOM attribute
-    // {Boolean} `checked` - A native DOM attribute
     const { name, checked } = event.target;
-    const index = event.target.getAttribute('index'); // {String} `index` - A custom DOM attribute
-    const types = [...this.state.types]; // array copy
+    const index = event.target.getAttribute('index');
+    const types = [...this.state.types];
 
     types[index] = {
       [name]: checked,
     };
-
 
     this.setState({
       types,
     });
   }
 
-
-  /**
-   * PUT request - update `helpful` count for a review
-   * @param {Object} event - The `Event` interface; a reference to then object onto which the event
-   *                         was dispatched.
-   */
   updateHelpful(event) {
-    const { id } = event.target; // {String} `id` - e.g. '2,1' where '2' listing ID; '1' review ID
-    const _id = id.split(',').map((num) => Number.parseInt(num)); // {Array} `_id` - e.g. [2, 1]
+    const { id } = event.target;
+    const _id = id.split(',').map((num) => Number.parseInt(num));
 
     axios.put('/reviews', { _id }, OPTIONS)
       .then(({ data: reviews }) => this.setState({ reviews }))
       .catch(console.error);
   }
 
-
-  /**
-   * Render
-   * @returns JSX element
-   */
   render() {
-    const {
-      languages,
-      ratings,
-      reviews,
-      search,
-      selectedLang,
-      times,
-      types,
-    } = this.state;
+    const { languages, ratings, reviews, search, selectedLang, times, types } = this.state;
 
     return (
       <div>

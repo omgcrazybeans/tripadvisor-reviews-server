@@ -6,7 +6,3 @@ const Header = () => (
 );
 
 export default Header;
-
-// export default () => (
-//   <H2>Reviews</H2>
-// );
