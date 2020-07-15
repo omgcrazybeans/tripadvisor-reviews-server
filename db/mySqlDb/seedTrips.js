@@ -13,9 +13,7 @@ module.exports = {
     var incriment = 0; // increase by 1 for every .5 mill successful queries
     var tripId = 500000 * incriment;
 
-    // Make a setInterval time that would wait 5-6  minutes before running another .5 million tables
-
-    for (var i = 0; i < 500000; i++) { // the amount of trip documents to make
+    for (var i = 0; i < 500000; i++) {
       let dateNum = generator.mySqlDateGen();
       let numOfReviews = generator.numOfReviews();
 
@@ -30,18 +28,7 @@ module.exports = {
       if ((i % 1000) === 0) {
         console.log(`Generated ${i} trips`);
       };
-      // if ((reviewLength % 1000) === 0) {
-      //   console.log(`Generated ${reviewLength} reviews`);
-      // }
-      // if ((i % 100000) === 0) {
-      //   db.seedTrips(objContainer);
-      //   db.seedReviews(reviewsArray);
-      //   objContainer = [];
-      //   reviewsArray = [];
-      // };
     };
-    // console.log(`TRIPS: `, tripsContainer);
-    // console.log(`REVIEWS: `, reviewsContainer);
     db.seedTrips(tripsContainer);
     db.seedReviews(reviewsContainer);
   }
