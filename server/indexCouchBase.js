@@ -1,4 +1,3 @@
-// Set up our express application
 const db = require('../db/couchBase/index.js');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -9,14 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Serve the public directory to the root of the web server.
 app.use(express.static(path.join(__dirname, '../client/dist')));
-
-
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 app.get('/reviews', (req, res) => {
   db.getAll(res, (error, result) => {
@@ -27,8 +19,6 @@ app.get('/reviews', (req, res) => {
     res.send(result);
   });
 });
-
-
 
 app.get('/reviews/:id', (req, res) => {
   var userId = "46cb41d6-c8e0-43eb-af60-6160465bf700"
@@ -42,9 +32,7 @@ app.get('/reviews/:id', (req, res) => {
   });
 });
 
-
-
-app.post('/addUser', (req, res) => { // For seeding purposes
+app.post('/addUser', (req, res) => {
 
   var testReqBody = {
     "name": {
