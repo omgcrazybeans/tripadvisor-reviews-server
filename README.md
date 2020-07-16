@@ -2,60 +2,40 @@
 
 ## Goal:
 
-Create two carousels for a property managment microservice for a real estate web app that presented the user with newly listed properties within their area of interest and properties which are similar to the properties that the user is currently viewing.
+I built the back-end of a user reviews microservice from a travel web app.
 
 ## Technologies:
 
 **Systems Programing Language**
 * JavaScript
-* Java
-* C++
-* C#
-* Golang
-* Ruby
-* Python
 
 **Web Frameworks**
 * React.JS
-* Angular
-* Vue
 * Express
 * Axios
-* Django
-* Rails
-* Meteor
 
 **Database Managment**
 * MongoDB
 * Couchbase
-* Cassandra
 * MySQL
-* Postgress
-* Hbsae
 
-**Development Frameworks**
+**Development Frameworks Or Tools**
 * Babel
 * Webpack
 * Enzyme
 * Jest
+* Chai
+* Mocha
+* New Relic
+* Loader.io
 
 **Container Orchestration Services**
 * Docker
 * AWS Images
-* Kubernetes
 
 **Public Cloud Services**
 * AWS
-* Google Cloud Platform
-* Azure
-* Heroku
-* Digital Ocean
-
-**Configuration Management Tools**
-* Salt
-* Puppet
-* Chef
-* Ansible
+* Mongo Atlas
 
 **Collaborative Methodologies**
 * Continuous Integration
@@ -77,12 +57,10 @@ Assumes MongoDB is installed and running in the local environment.
   * $ npm install
 
 2. Seed the test data:
-  * $ npm run seed
+  * $ npm run mongo-seed
 
 3. Start the local server:
-  * $ npm run start
+  * $ npm run mongo-start
 
 4. Routs:
-  *
-
-Pick any browser and load the site http://localhost:3001/homes/10 to see an example response for a request from the server.
+  * http://localhost:4060/
