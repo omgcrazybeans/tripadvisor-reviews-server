@@ -42,13 +42,6 @@ I built the back-end of a user reviews microservice from a travel web app. The a
 * Unit, Integrated, Functional Testing
 * Code Branching, Architecture Branching
 
-## Images:
-
-![GitHub Logo](/images/logo.png)
-Format: ![Alt Text](url)
-<img src="siteImages/homely_top_component.jpg" width="400">
-
-
 ## Reproduction Steps:
 
 Assumes MongoDB or Mongo Atlas cloud service is installed and running in the local environment.
