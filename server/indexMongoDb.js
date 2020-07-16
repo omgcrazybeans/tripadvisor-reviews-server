@@ -43,7 +43,7 @@ app.put('/review/:id', db.updateReview);
 app.delete('/trip/:id', db.deleteTrip);
 app.delete('/review/:id', db.deleteReview);
 app.delete('/thefinalcountdown', db.killAllData); // Deletes all documents in database
-app.get('/datesize', db.dataSize);
+app.get('/datasize', db.dataSize);
 app.get('/querytest1', db.queryTest1);
 app.get('/querytest2', db.queryTest2);
 

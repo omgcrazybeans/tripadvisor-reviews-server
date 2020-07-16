@@ -1,8 +1,8 @@
 # Wanderlust - Wander off onto your next adventure
 
-## Goal:
+## Goals:
 
-I built the back-end of a user reviews microservice from a travel web app.
+I built the back-end of a user reviews microservice from a travel web app. The app was deployed on AWS cloud service. The web app was scaled to handle 500 user queries/second with sub second latency time on a database containing 40+ million data entries.
 
 ## Technologies:
 
@@ -51,7 +51,7 @@ Format: ![Alt Text](url)
 
 ## Reproduction Steps:
 
-Assumes MongoDB is installed and running in the local environment.
+Assumes MongoDB or Mongo Atlas cloud service is installed and running in the local environment.
 
 1. Install repo dependencies:
   * $ npm install
@@ -64,3 +64,6 @@ Assumes MongoDB is installed and running in the local environment.
 
 4. Routs:
   * http://localhost:4060/
+  * http://localhost:4060/review (Retrieves reviews)
+  * http://localhost:4060/datasize (Returns database info)
+  * http://localhost:4060/thefinalcountdown (Deletes whole databse)
