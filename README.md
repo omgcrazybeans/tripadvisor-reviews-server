@@ -1,60 +1,88 @@
 # Wanderlust - Wander off onto your next adventure
 
-======= 1. Seeding Instructions =======
+## Goal:
 
-============= Terminal  1 =============
-$ npm run seed
+Create two carousels for a property managment microservice for a real estate web app that presented the user with newly listed properties within their area of interest and properties which are similar to the properties that the user is currently viewing.
 
-============= Terminal  2 =============
+## Technologies:
 
-$ mongo
+**Systems Programing Language**
+* JavaScript
+* Java
+* C++
+* C#
+* Golang
+* Ruby
+* Python
 
-> show dbs
-> use tripAdvisor
-> show collections
-> db.listings.count()
-> db.listings.findOne({}, { "_id": 1 })
+**Web Frameworks**
+* React.JS
+* Angular
+* Vue
+* Express
+* Axios
+* Django
+* Rails
+* Meteor
+
+**Database Managment**
+* MongoDB
+* Couchbase
+* Cassandra
+* MySQL
+* Postgress
+* Hbsae
+
+**Development Frameworks**
+* Babel
+* Webpack
+* Enzyme
+* Jest
+
+**Container Orchestration Services**
+* Docker
+* AWS Images
+* Kubernetes
+
+**Public Cloud Services**
+* AWS
+* Google Cloud Platform
+* Azure
+* Heroku
+* Digital Ocean
+
+**Configuration Management Tools**
+* Salt
+* Puppet
+* Chef
+* Ansible
+
+**Collaborative Methodologies**
+* Continuous Integration
+* Unit, Integrated, Functional Testing
+* Code Branching, Architecture Branching
+
+## Images:
+
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
+<img src="siteImages/homely_top_component.jpg" width="400">
 
 
+## Reproduction Steps:
 
+Assumes MongoDB is installed and running in the local environment.
 
+1. Install repo dependencies:
+  * $ npm install
 
-========= 2. API Instructions =========
+2. Seed the test data:
+  * $ npm run seed
 
-============ 2A Terminal 3 ============
-$ npm start
+3. Start the local server:
+  * $ npm run start
 
-============ 2B Terminal 4 ============
-$ npm run api
+4. Routs:
+  *
 
-========= 2C Close Terminal 3 =========
-
-
-
-
-
-========= 3. Test Instruction =========
-
-============= Terminal  5 =============
-$ npm test
-
-
-
-
-
-========= 4. Run  Application =========
-
-============= Terminal  6 =============
-$ npm start
-
-============= Terminal  7 =============
-$ npm run react-dev
-
-
-
-
-
-========== Test NightWatchJS ==========
-
-============= Terminal  X =============
-$ ./node_modules/.bin/nightwatch node_modules/nightwatch/examples/tests/ecosia.js
+Pick any browser and load the site http://localhost:3001/homes/10 to see an example response for a request from the server.
